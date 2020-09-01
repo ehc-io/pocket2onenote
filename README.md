@@ -1,4 +1,4 @@
-# pocket2note
+# Pocket2OneNote
 
 Export Mozilla Pocket Bookmarks to Microsoft OneNote  
 
