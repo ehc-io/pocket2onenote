@@ -3,6 +3,5 @@ config/default.json
 node_modules
 package-lock.json
 pocket2onenote.code-workspace
-*.png
 .markdownlint.json
 .eslintrc
