@@ -7,6 +7,10 @@ Being that said, please have that in mind when reading my spaghetti code.
 
 ## Installation
 
+First of all install the npm package dependencies
+
+    npm install --save
+  
 Fill out **config/creds.js** and **config/default.json** with your data, use the examples files for that.
 Most of the information inside those files is pretty stright-forward on how to get them. Although The API section is a bit tricky but those are explained latter on.
 
