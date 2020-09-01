@@ -77,6 +77,5 @@ There are 7 scripts under bin folder as follows
   > [used internally no need to run it manually]  
 
 I recommend you create a crontab job to run the first three scripts on a frequent basis.
->Run the scripts from the bin/ folder:
 
-    bin/ node pagescraper.js
+Run the scripts from the pocket2node/bin/ folder
