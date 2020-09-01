@@ -58,7 +58,7 @@ There are 7 scripts under bin folder as follows
   **pagescraper.js** => run it first, it scrapes all the article pages and populates the db with the article urls it finds.
 > [run this script everytime you have new articles]
   
-  **articlescraper.js** => run this one for grabing the actual content, it scrapes each article individually and saves in the db. Be aware you may hit pocket rate limit eventually. The script will count consecutive errors and will exit automatically, Be smart and don't scrape that hard otherwise you're IP is going to be rate limited forever.
+  **articlescraper.js** => run this one for grabing the actual content, it scrapes each article individually and saves in the db. Be aware you may hit pocket rate limit eventually (BLOCKED). The script will count consecutive errors and will exit automatically. Be smart and don't scrape too often otherwise you're IP is going to be always blocked.
 > [run this script everytime you have new articles]
   
   **uploader.js** => Finally when articles are populated into db, this get the data out to MS One Note.
