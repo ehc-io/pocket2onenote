@@ -14,7 +14,7 @@ Most of the information inside those files is pretty stright-forward on how to g
 
 This setup assumes you already have an existing Mongodb instance to store your posts before uploading those to MSOneNote. if you don't have ir, just run it from a docker instance on your machine using the script bellow:  
 
->   docker run -p 27017:27017 -v <local-folder-to-store-your-data>:/data/db -d -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=SOME_PASSWORD mongo:latest
+    > docker run -p 27017:27017 -v <local-folder-to-store-your-data>:/data/db -d -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=SOME_PASSWORD mongo:latest
 
 ### OneNote API Authentication
   
@@ -22,7 +22,7 @@ First of all you need to register you app in the Azure POrtal, this is required 
 
 > <https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app>
 
-> When asked for supported accounts, choose: "Accounts in any organization directory (any Azure AD directory - Multitenant) and personal Microsoft accounts (e.g. Skype, Xbox)".
+> When asked for supported accounts, choose "Accounts in any organization directory (any Azure AD directory - Multitenant) and personal Microsoft accounts (e.g. Skype, Xbox)".
 
 Then we need to handle authentication for the OneNote API. This is achived by OAuth tokens we first acquire from a personal Microsoft Account. I've used the <https://github.com/ehc-io/msgraph-training-nodeexpressapp> repo as a portal for that, but you're welcome to come up with any other smarter ways.
 
