@@ -10,16 +10,17 @@ Being that said, please have that in mind when reading my spaghetti code.
 Fill out **config/creds.js** and **config/default.json** with your data, use the examples files for that.
 Most of the information inside those files is pretty stright-forward on how to get them. Although The API section is a bit tricky but those are explained latter on.
 
-- Mongodb
+### Mongodb
+
 This setup assumes you already have an existing Mongodb instance to store your posts before uploading those to MSOneNote. if you don't have ir, just run it from a docker instance on your machine using the script bellow:  
 
     >    docker run -p 27017:27017 -v <local-folder-to-store-your-data>:/data/db -d -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=SOME_PASSWORD mongo:latest
 
-- OneNote API Authentication
+### OneNote API Authentication
   
 First of all you need to register you app in the Azure POrtal, this is required for every app which consumes MSGraph APIs. Please follow the steps in the link below. When done you will obtain the **client_id** and **client_secret** values to fill in the config file (creds.js).
 
-### <https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app>
+> <https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app>
 
 > When asked for supported accounts, choose "Accounts in any organization directory (any Azure AD directory - Multitenant) and personal Microsoft accounts (e.g. Skype, Xbox)
 
