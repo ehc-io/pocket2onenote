@@ -1,2 +1,4 @@
 config/creds.js
 config/default.json
+node_modules
+package-lock.json
