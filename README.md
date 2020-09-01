@@ -1,6 +1,6 @@
 # Pocket2OneNote
 
-Export Mozilla Pocket Bookmarks to Microsoft OneNote  
+Upload Mozilla Pocket Bookmarks to Microsoft OneNote  
 
 Disclaimer:  The main purpose of this project was me trying to learn Nodejs and Puppeteer.  
 Being that said, please have that in mind when reading my spaghetti code.
