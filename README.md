@@ -14,7 +14,7 @@ Most of the information inside those files is pretty stright-forward on how to g
 
 This setup assumes you already have an existing Mongodb instance to store your posts before uploading those to MSOneNote. if you don't have ir, just run it from a docker instance on your machine using the script bellow:  
 
-> docker run -p 27017:27017 -v <local-folder-to-store-your-data>:/data/db -d -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=SOME_PASSWORD mongo:latest
+>   docker run -p 27017:27017 -v <local-folder-to-store-your-data>:/data/db -d -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=SOME_PASSWORD mongo:latest
 
 ### OneNote API Authentication
   
