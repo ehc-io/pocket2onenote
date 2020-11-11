@@ -34,19 +34,6 @@ async function save2db(Model, data) {
   }
 }
 
-// async function findDoc(Model, query) {
-//   const results = await Model.find(query, function(err) {
-//     if (err) {
-//       return err;
-//     }
-//   });
-//   // console.log(`Found ${results.length} documents`);
-//   // results.forEach(element => {
-//   //   console.log(element);
-//   // });
-//   return results;
-// }
-
 async function findDocs(model, query, sort) {
   const results = await model.find(query, null, { sort }, function(err, docs) {
     if (err) {

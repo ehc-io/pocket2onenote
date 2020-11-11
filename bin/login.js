@@ -7,9 +7,7 @@ const CREDS = require('../config/creds');
 const database = config.get('mongoURIlocal');
 const AzureTokensModel = require('../models/oauthtokens');
 
-const { connect2db } = require('./mongoops');
-const { closedb } = require('./mongoops');
-const { save2db } = require('./mongoops');
+const { connect2db, closedb, save2db } = require('./mongoops');
 
 const SIGNIN_SELECTOR = 'body > main > div > a';
 const USERNAME_SELECTOR = 'input[name=loginfmt]';
@@ -22,7 +20,7 @@ function authenticate(url) {
   return new Promise(async (resolve, reject) => {
     try {
       const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         // args: ['--proxy-server=https://proxy-vivo:3128'],
       });
       console.log(`loading home page URL ...`);
@@ -76,5 +74,3 @@ async function main() {
 }
 
 main();
-
-// module.exports.login = login;
