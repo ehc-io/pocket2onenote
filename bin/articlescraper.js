@@ -14,6 +14,10 @@ const ArticleModel = require('../models/pocketarticles');
 const DBLogModel = require('../models/operations');
 // these articles shall not pass
 
+function randomIntFromInterval(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 // Individually scrapes articles
 async function articlescraper(browser, articles) {
   const bypassList = /redirect|youtube|twitter|pdf/g;
@@ -29,7 +33,7 @@ async function articlescraper(browser, articles) {
       console.log(`${articles[i].url} bypassed`);
       continue;
     }
-    const randomWait = [Math.floor(Math.random() * 15)];
+    const randomWait = randomIntFromInterval(8,30);
     const page = await browser.newPage();
     try {
       await page.goto(articles[i].url);

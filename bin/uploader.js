@@ -66,7 +66,7 @@ async function refreshtokens() {
         }
       })
       .catch(function(error) {
-        // console.log(error);
+        console.log(error);
         console.log(
           `Error while trying to refresh token - Code: ${error.response.status} - Msg: ${error.response.statusText}`
         );

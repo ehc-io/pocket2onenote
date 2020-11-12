@@ -6,3 +6,5 @@ screenshots/*.png
 .markdownlint.json
 pocket2onenote.code-workspace
 .eslintrc
+config/creds.js.example
+config/default.json.example

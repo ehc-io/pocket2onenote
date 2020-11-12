@@ -1,12 +1,11 @@
 // Creates Puppeteer Session / authenticates with email & passwd
 const puppeteer = require('puppeteer');
 const CREDS = require('../config/creds');
-const creds = require('../config/creds');
 
 async function createbrowsersession() {
   console.log('Initiating browser session...');
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: CREDS.browser.headless,
     ignoreHTTPSErrors: true,
     devtools: false,
     args: [
