@@ -1,0 +1,3 @@
+{
+    "<mongoURI>": "mongodb://<mongoadmin>:<mongoadmin-pwd>@localhost:27017/pocket2note?authSource=admin&ssl=false"
+}
