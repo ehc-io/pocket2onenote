@@ -33,7 +33,7 @@ async function articlescraper(browser, articles) {
       console.log(`${articles[i].url} bypassed`);
       continue;
     }
-    const randomWait = randomIntFromInterval(8,30);
+    const randomWait = randomIntFromInterval(12,50);
     const page = await browser.newPage();
     try {
       await page.goto(articles[i].url);
