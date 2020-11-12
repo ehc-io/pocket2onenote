@@ -35,7 +35,7 @@ async function createbrowsersession() {
   await page.screenshot({ path: '../screenshots/login.png' });
   await page.click(LOGIN_BUTTON_SELECTOR);
   // if you HIT Captcha, adjust the wait time here
-  await page.waitFor(creds.pocket.LOGIN_WAIT_TIME * 1000);
+  await page.waitFor(CREDS.pocket.LOGIN_WAIT_TIME * 1000);
   console.log('Login sucessful...');
   //
   await page.screenshot({ path: '../screenshots/afterlogin.png' });
