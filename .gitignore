@@ -5,3 +5,4 @@ package-lock.json
 pocket2onenote.code-workspace
 .markdownlint.json
 .eslintrc
+screenshots/*.png
