@@ -7,22 +7,32 @@ Being that said, please have that in mind when reading my spaghetti code.
 
 ## Installation
 
+First of all install the npm package dependencies
+
+    npm install --save
+  
 Fill out **config/creds.js** and **config/default.json** with your data, use the examples files for that.
 Most of the information inside those files is pretty stright-forward on how to get them. Although The API section is a bit tricky but those are explained latter on.
 
 ### Mongodb
 
-This setup assumes you already have an existing Mongodb instance to store your posts before uploading those to MSOneNote. if you don't have ir, just run it from a docker instance on your machine using the script bellow:  
+This setup assumes you already have an existing Mongodb instance to store your posts before uploading those to MSOneNote. if you don't have one, I suggest you just run it from a docker instance using the script bellow:  
 
     docker run -p 27017:27017 -v <local-folder-to-store-your-data>:/data/db -d -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=SOME_PASSWORD mongo:latest
 
 ### OneNote API Authentication
-  
-First of all you need to register you app in the Azure POrtal, this is required for every app which consumes MSGraph APIs. Please follow the steps in the link below. When done you will obtain the **client_id** and **client_secret** values to fill in the config file (creds.js).
 
-> <https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app>
+First of all you need to register you app in the Azure POrtal, this is required for every app which consumes MSGraph APIs. Please follow the steps in the link below.
 
-> When asked for supported accounts, choose "Accounts in any organization directory (any Azure AD directory - Multitenant) and personal Microsoft accounts (e.g. Skype, Xbox)".
+> <https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app>  
+
+When asked for supported accounts, choose "Accounts in any organization directory (any Azure AD directory - Multitenant) and personal Microsoft accounts (e.g. Skype, Xbox)".
+
+On step 7 make sure you point the **Redirect URL** option to <http://localhost:3000/auth/callback>
+
+Now you need to register the client secret, please follow the instructions here:
+
+> <https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-web-app-call-api-app-registration>
 
 Then we need to handle authentication for the OneNote API. This is achived by OAuth tokens we first acquire from a personal Microsoft Account. I've used the <https://github.com/ehc-io/msgraph-training-nodeexpressapp> repo as a portal for that, but you're welcome to come up with any other smarter ways.
 

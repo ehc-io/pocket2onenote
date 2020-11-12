@@ -2,7 +2,6 @@ config/creds.js
 config/default.json
 node_modules
 package-lock.json
-screenshots/*.png
-.markdownlint.json
 pocket2onenote.code-workspace
+.markdownlint.json
 .eslintrc
