@@ -1,4 +1,5 @@
 // process.env.NODE_CONFIG_DIR = `../config`;
+process.env.SUPPRESS_NO_CONFIG_WARNING = true;
 
 const config = require('config');
 const CREDS = require('../config/creds');
@@ -50,6 +51,7 @@ async function pagescraper(browser) {
   //
   let lastArticleUrl = null;
   let lastArticleUrlSfterScrolling = null;
+
   let results = [];
   let newResults = [];
   let pageCounter = 1;
@@ -72,19 +74,19 @@ async function pagescraper(browser) {
       return lastElementUrl;
     }, lastPageElementHandler);
     // scrolling based on the current latest item obtained before scrolling takes place
-    console.log(`Scrolling to the next page ...`);
+    console.log(`Scrolling to next page ...`);
     await page.evaluate(lastElement => {
       // lastElement.scrollIntoViewIfNeeded();
-      lastElement.scrollIntoView({
+      lastElement.scrollIntoView(true, {
         behavior: 'auto',
         block: 'end',
         inline: 'end',
       });
     }, lastPageElementHandler);
     // fine tunning to force srolling and new article refresh
-    await page.evaluate(() => {
-      window.scrollBy(0, 200);
-    });
+    // await page.evaluate(() => {
+    //   window.scrollBy(0, 200);
+    // });
     // wait timeout in order for scrolling takes place and elements change
     await page.waitFor(CREDS.browser.PAGELOAD_WAIT_TIME * 1000);
     pageCounter += 1;

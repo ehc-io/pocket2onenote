@@ -1,4 +1,6 @@
 // process.env.NODE_CONFIG_DIR = `../config`;
+process.env.SUPPRESS_NO_CONFIG_WARNING = true;
+
 const config = require('config');
 const CREDS = require('../config/creds');
 
@@ -47,7 +49,7 @@ async function articlescraper(browser, articles) {
     console.log(`sleeping for ${randomWait} sec ...`);
     await page.waitFor(randomWait * 1000);
     console.log(`Scraping: ${articles[i].url}`);
-    await page.screenshot({ path: '../screenshots/article.png' });
+    // await page.screenshot({ path: '../screenshots/article.png' });
     const articleHandler = await page.evaluateHandle(
       css => document.querySelector(css),
       cssMainArticle

@@ -1,4 +1,6 @@
 // process.env.NODE_CONFIG_DIR = `../config`;
+process.env.SUPPRESS_NO_CONFIG_WARNING = true;
+
 const config = require('config');
 
 const puppeteer = require('puppeteer');
