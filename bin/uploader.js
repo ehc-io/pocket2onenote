@@ -1,7 +1,10 @@
 process.env.NODE_CONFIG_DIR = `../config`;
+process.env.SUPPRESS_NO_CONFIG_WARNING = true;
 const axios = require('axios');
 
 const config = require('config');
+// const { doc } = require('prettier');
+const dateFormat = require('date-fns/format');
 const CREDS = require('../config/creds');
 
 const database = config.get('mongoURIlocal');
@@ -10,8 +13,11 @@ const ArticleModel = require('../models/pocketarticles');
 const DBLogModel = require('../models/operations');
 
 const bodyReplacer = new RegExp('/<h1>.+</h1>/');
-const apiEndpoint = `https://graph.microsoft.com/v1.0/me/onenote/sections/${CREDS.azure.onenotesection}/pages/`;
-const { getLastTokenFromDB, refreshtokens } = require('./auth');
+const { getValidToken, refreshtokens } = require('./auth');
+const { sendMSGraphAPIRequest } = require('./sharedfunctions');
+
+// const getSectionIdEndpoint = require('./notesorganizer');
+
 const {
   connect2db,
   findAndUpdate,
@@ -28,7 +34,120 @@ function gethashtags(tagList) {
   return hashTags;
 }
 
+async function getSectionIdEndpoint() {
+  // await connect2db(database);
+  const tokenObj = await getValidToken(AzureTokensModel);
+  const { notebookName } = CREDS.azure;
+  const { maxPagesperSection } = CREDS.azure;
+  const newSectionName = dateFormat(new Date(Date.now()), 'yyyy-MM-dd-hh-mm');
+  let notebookId;
+  let latestSectionId;
+  let notebookCreateResp;
+  let sectionCreateResp;
+  let pagesForSectionQuery;
+  let currentTotalPagesForSection;
+  let createdNewSection;
+  let foundNotebook = false;
+  const currentNotebooks = await sendMSGraphAPIRequest(
+    CREDS.azure.msGraphHost,
+    CREDS.azure.notebookEndpoint,
+    'GET',
+    null,
+    tokenObj.token.access_token
+  );
+  const currentSections = await sendMSGraphAPIRequest(
+    CREDS.azure.msGraphHost,
+    `${CREDS.azure.sectionsEndpoint}?$orderby=lastModifiedDateTime+desc`,
+    'GET',
+    null,
+    tokenObj.token.access_token
+  );
+  if (!currentNotebooks) {
+    console.log(`not able to get current notebooks - aborting`);
+    process.exit();
+  }
+  if (!currentSections) {
+    console.log(`not able to get current sections - aborting`);
+    process.exit();
+  }
+  // lists all Notebooks and compare displayName with Notebook name to be used - CREDS.azure.notebookName
+  // if found store name and Id inside "notebookName" and  "notebookId" variables
+  currentNotebooks.value.every(notebook => {
+    if (notebook.displayName === notebookName) {
+      notebookId = notebook.id;
+      foundNotebook = true;
+      // console.log(`Found Notebook: ${notebookName} - id: ${notebookId}`);
+      return false;
+    }
+    return true;
+  });
+  // Detects if a new noteboook needs to be created - if positive populate notebookName and notebookId variables
+  if (!foundNotebook) {
+    notebookCreateResp = await sendMSGraphAPIRequest(
+      CREDS.azure.msGraphHost,
+      CREDS.azure.notebookEndpoint,
+      'POST',
+      JSON.stringify({ displayName: notebookName }),
+      tokenObj.token.access_token
+    );
+
+    if (notebookCreateResp) {
+      notebookId = notebookCreateResp.id;
+      console.log(
+        `New Notebook created: ${notebookName} - id ${notebookCreateResp.id}`
+      );
+    }
+  }
+  //
+  // Get the latest stored section and its ammount of existing pages
+  //
+  if (currentSections.value.length > 0) {
+    // Get ammount of pages on existing Section
+    latestSectionId = currentSections.value[0].id;
+    pagesForSectionQuery = await sendMSGraphAPIRequest(
+      CREDS.azure.msGraphHost,
+      [
+        CREDS.azure.sectionsEndpoint,
+        currentSections.value[0].id,
+        'pages?$count=true',
+      ].join('/'),
+      'GET',
+      null,
+      tokenObj.token.access_token
+    );
+    currentTotalPagesForSection = parseInt(
+      pagesForSectionQuery['@odata.count']
+    );
+  } else {
+    currentTotalPagesForSection = 0;
+    createdNewSection = true;
+  }
+  //
+  // If the section isn't created already or has #pages > maxPagesperSection
+  //
+  if (createdNewSection || currentTotalPagesForSection >= maxPagesperSection) {
+    sectionCreateResp = await sendMSGraphAPIRequest(
+      CREDS.azure.msGraphHost,
+      [CREDS.azure.notebookEndpoint, notebookId, 'sections'].join('/'),
+      'POST',
+      JSON.stringify({ displayName: newSectionName }),
+      tokenObj.token.access_token
+    );
+    if (sectionCreateResp) {
+      latestSectionId = sectionCreateResp.id;
+      console.log(
+        `New Section created: ${newSectionName} - id ${sectionCreateResp.id}`
+      );
+    }
+  }
+
+  return `https://${CREDS.azure.msGraphHost}${CREDS.azure.sectionsEndpoint}/${latestSectionId}/pages`;
+}
+
 async function uploadArticle(document, tokenObject) {
+  const apiEndpoint = await getSectionIdEndpoint();
+  // console.log(`API endpoint: ${apiEndpoint}`);
+  // process.exit();
   let result = false;
   const payload = `
     <html lang="en-US">
@@ -65,8 +184,11 @@ async function uploadArticle(document, tokenObject) {
     })
     .catch(async function(error) {
       console.log(
-        `url: ${document.url} returned an error while submiting article to OneNote`
+        `url: ${document.url} returned an error while submiting article to OneNote - Status code: ${error.response.status}`
       );
+      if (error.response.status === 404) {
+        process.exit(1);
+      }
       await save2db(DBLogModel, {
         url: document.url,
         operationType: 'article post',
@@ -92,15 +214,19 @@ async function main() {
       sync: false,
       scraped: true,
     });
+    console.log(`There are ${documents.length} articles to post`);
     for (const item of documents) {
       let postResult = false;
-      // console.log(item.url);
       const maxUploadTries = 2;
       let round = 0;
       const timeout = [Math.floor(Math.random() * 5000)];
       while (round < maxUploadTries && !postResult) {
-        const lastValidToken = await getLastTokenFromDB(AzureTokensModel);
-        postResult = await uploadArticle(item, lastValidToken);
+        const tokenObj = await getValidToken(AzureTokensModel);
+        try {
+          postResult = await uploadArticle(item, tokenObj);
+        } catch {
+          console.log(`not able to Post article: ${item.url}`);
+        }
         round += 1;
       }
       await pause(timeout);

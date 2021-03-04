@@ -1,5 +1,7 @@
 process.env.NODE_CONFIG_DIR = `../config`;
 const config = require('config');
+const CREDS = require('../config/creds');
+
 //
 const database = config.get('mongoURIlocal');
 const { createbrowsersession } = require('./navigation');
@@ -17,8 +19,9 @@ const DBLogModel = require('../models/operations');
 // Individually scrapes articles
 async function articlescraper(browser, articles) {
   const bypassList = /redirect|youtube|twitter|pdf/g;
-  const cssArticleTags = '#root > div > div > div > div > header > div > div a';
-  const cssMainArticle = 'header';
+  const cssArticleTags =
+    '#__next > main > article > header > div ~ div > div > ul > li';
+  const cssMainArticle = 'article';
   const maxScrapeErrors = 5;
   const resultArray = [];
   let errorsCounter = 0;
@@ -29,7 +32,9 @@ async function articlescraper(browser, articles) {
       console.log(`${articles[i].url} bypassed`);
       continue;
     }
-    const randomWait = [Math.floor(Math.random() * 15)];
+    const randomWait = [
+      Math.floor(Math.random() * CREDS.browser.ANTI_RATE_LIMIT_RANDOM_MAX_WAIT),
+    ];
     const page = await browser.newPage();
     try {
       await page.goto(articles[i].url);
@@ -47,8 +52,8 @@ async function articlescraper(browser, articles) {
       cssMainArticle
     );
     try {
-      itemTags = await page.$$eval(cssArticleTags, nodes =>
-        nodes.map(node => node.textContent)
+      itemTags = await page.$$eval(cssArticleTags, liNodes =>
+        liNodes.map(node => node.textContent)
       );
     } catch (err) {
       itemTags = [];
@@ -57,9 +62,16 @@ async function articlescraper(browser, articles) {
     try {
       resultArray[i] = await page.evaluate(
         (handler, articleTags) => {
-          const title = handler.children[0].textContent;
+          const title = handler.querySelector('h1').textContent;
           const tags = articleTags;
-          const body = handler.nextElementSibling.outerHTML;
+          let body;
+          // new stricture
+          try {
+            body = handler.querySelector('section').outerHTML;
+          } catch {
+            // fallback
+            body = handler.querySelector('div').outerHTML;
+          }
           const scraped = true;
           return { title, tags, body, scraped };
         },
@@ -67,7 +79,7 @@ async function articlescraper(browser, articles) {
         itemTags
       );
     } catch (err) {
-      console.log(`Alert! Got an error while scraping article`);
+      console.log(`Alert! Got an error while scraping article: ${err}`);
       errorsCounter += 1;
 
       save2db(DBLogModel, {
@@ -116,7 +128,7 @@ async function main() {
         webSession.browserState,
         documents
       );
-      console.log(`Articles scraped: ${articlesScraped}`);
+      console.log(`Articles scraped: ${articlesScraped.length}`);
     }
     closedb(database);
   }

@@ -31,7 +31,6 @@ const BookmarkSchema = new Schema({
   },
   dateOfEntry: {
     type: Date,
-    default: Date.now(),
   },
 });
 
