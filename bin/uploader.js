@@ -1,4 +1,4 @@
-process.env.NODE_CONFIG_DIR = `../config`;
+// process.env.NODE_CONFIG_DIR = `../config`;
 process.env.SUPPRESS_NO_CONFIG_WARNING = true;
 const axios = require('axios');
 

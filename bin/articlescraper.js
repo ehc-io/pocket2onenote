@@ -1,4 +1,4 @@
-process.env.NODE_CONFIG_DIR = `../config`;
+// process.env.NODE_CONFIG_DIR = `../config`;
 const config = require('config');
 const CREDS = require('../config/creds');
 
@@ -18,6 +18,7 @@ const DBLogModel = require('../models/operations');
 
 // Individually scrapes articles
 async function articlescraper(browser, articles) {
+  // bypass url
   const bypassList = /redirect|youtube|twitter|pdf/g;
   const cssArticleTags =
     '#__next > main > article > header > div ~ div > div > ul > li';

@@ -7,9 +7,15 @@
         "axios": "^0.19.2",
         "chalk": "^4.1.0",
         "config": "^3.3.1",
+        "date-fns": "^2.16.1",
+        "http": "0.0.1-security",
+        "https-proxy-agent": "^5.0.0",
         "mongoose": "^5.9.22",
+        "node-fetch": "^2.6.1",
         "puppeteer": "^5.0.0",
-        "qs": "^6.9.4"
+        "qs": "^6.9.4",
+        "request": "^2.88.2",
+        "prettier": "^1.19.1"
     },
     "peerDependencies": {},
     "devDependencies": {
@@ -23,11 +29,13 @@
         "eslint-plugin-jsx-a11y": "^6.3.1",
         "eslint-plugin-prettier": "^3.1.4",
         "eslint-plugin-react": "^7.20.3",
-        "eslint-plugin-react-hooks": "^1.7.0",
-        "prettier": "^1.19.1"
+        "eslint-plugin-react-hooks": "^1.7.0"
     },
     "scripts": {
-        "test": "node ./pocket2note.js"
+        "azurelogin": "node ./bin/login.js",
+        "get-articles": "node ./bin/articlescraper.js",
+        "get-pages": "node ./bin/pagescraper.js",
+        "get-sync": "node ./bin/uploader.js"
     },
     "repository": {
         "type": "git",

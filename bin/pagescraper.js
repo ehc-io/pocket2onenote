@@ -1,4 +1,4 @@
-process.env.NODE_CONFIG_DIR = `../config`;
+// process.env.NODE_CONFIG_DIR = `../config`;
 
 const config = require('config');
 const CREDS = require('../config/creds');
