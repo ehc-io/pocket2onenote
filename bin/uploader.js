@@ -3,7 +3,6 @@ process.env.SUPPRESS_NO_CONFIG_WARNING = true;
 const axios = require('axios');
 
 const config = require('config');
-// const { doc } = require('prettier');
 const dateFormat = require('date-fns/format');
 const CREDS = require('../config/creds');
 
@@ -55,19 +54,8 @@ async function getSectionIdEndpoint() {
     null,
     tokenObj.token.access_token
   );
-  const currentSections = await sendMSGraphAPIRequest(
-    CREDS.azure.msGraphHost,
-    `${CREDS.azure.sectionsEndpoint}?$orderby=lastModifiedDateTime+desc`,
-    'GET',
-    null,
-    tokenObj.token.access_token
-  );
   if (!currentNotebooks) {
     console.log(`not able to get current notebooks - aborting`);
-    process.exit();
-  }
-  if (!currentSections) {
-    console.log(`not able to get current sections - aborting`);
     process.exit();
   }
   // lists all Notebooks and compare displayName with Notebook name to be used - CREDS.azure.notebookName
@@ -99,6 +87,19 @@ async function getSectionIdEndpoint() {
     }
   }
   //
+  // Get Current Sections
+  const currentSections = await sendMSGraphAPIRequest(
+    CREDS.azure.msGraphHost,
+    `${CREDS.azure.notebookEndpoint}/${notebookId}/sections?$orderby=lastModifiedDateTime+desc`,
+    'GET',
+    null,
+    tokenObj.token.access_token
+  );
+  if (!currentSections) {
+    console.log(`not able to get current sections - aborting`);
+    process.exit();
+  }
+  //
   // Get the latest stored section and its ammount of existing pages
   //
   if (currentSections.value.length > 0) {
@@ -106,11 +107,9 @@ async function getSectionIdEndpoint() {
     latestSectionId = currentSections.value[0].id;
     pagesForSectionQuery = await sendMSGraphAPIRequest(
       CREDS.azure.msGraphHost,
-      [
-        CREDS.azure.sectionsEndpoint,
-        currentSections.value[0].id,
-        'pages?$count=true',
-      ].join('/'),
+      [CREDS.azure.sectionsEndpoint, latestSectionId, 'pages?$count=true'].join(
+        '/'
+      ),
       'GET',
       null,
       tokenObj.token.access_token

@@ -32,7 +32,7 @@
         "eslint-plugin-react-hooks": "^1.7.0"
     },
     "scripts": {
-        "azurelogin": "node ./bin/login.js",
+        "azurelogin": "node ./bin/o365login.js",
         "get-articles": "node ./bin/articlescraper.js",
         "get-pages": "node ./bin/pagescraper.js",
         "get-sync": "node ./bin/uploader.js"

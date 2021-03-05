@@ -24,9 +24,9 @@ async function getUrlArticlesForPage(page) {
     });
     return elArray;
   }, cssArticles);
-  results.forEach(el => {
-    console.log(`debug: ${el}`);
-  });
+  // results.forEach(el => {
+  //   console.log(`debug: ${el}`);
+  // });
   // filtering existing URLs
   console.log(`here I have ${results.length}`);
   for (const articleUrl of results) {

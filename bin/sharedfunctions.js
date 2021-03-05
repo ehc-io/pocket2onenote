@@ -10,7 +10,9 @@ function httpRequest(params, data) {
     const req = https.request(params, function(res) {
       if (res.statusCode < 200 || res.statusCode >= 300) {
         reject(
-          console.log(`HTTP request Rejected - statusCode=${res.statusCode}`)
+          console.log(
+            `Req: ${res.req.method} ${res.req.protocol}://${res.req.host}${res.req.path} - Resp: HTTP request Rejected - statusCode=${res.statusCode}`
+          )
         );
       }
       // cumulate data
