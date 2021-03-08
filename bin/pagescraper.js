@@ -45,7 +45,7 @@ async function pagescraper(browser) {
   console.log('Opening home page...');
   const page = await browser.newPage();
   await page.goto('https://app.getpocket.com/');
-  await page.waitFor(CREDS.browser.PAGELOAD_WAIT_TIME * 1000);
+  await page.waitForTimeout(CREDS.browser.PAGELOAD_WAIT_TIME * 1000);
   // await page.screenshot({ path: '../screenshots/home.png' });
   console.log('Parsing the DOM ...');
   //
@@ -88,7 +88,7 @@ async function pagescraper(browser) {
     //   window.scrollBy(0, 200);
     // });
     // wait timeout in order for scrolling takes place and elements change
-    await page.waitFor(CREDS.browser.PAGELOAD_WAIT_TIME * 1000);
+    await page.waitForTimeout(CREDS.browser.PAGELOAD_WAIT_TIME * 1000);
     pageCounter += 1;
     if (newResults.length === 0) {
       noNewArticlesCounter += 1;

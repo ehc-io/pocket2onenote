@@ -28,7 +28,7 @@ async function createbrowsersession() {
   await page.goto(LOGIN_PAGE);
   console.log(`my user: ${CREDS.pocket.username}`);
   console.log(`my pass: ${CREDS.pocket.password}`);
-  await page.waitFor(2 * 1000);
+  await page.waitForTimeout(2 * 1000);
   await page.click(USERNAME_SELECTOR);
   await page.keyboard.type(CREDS.pocket.username);
   await page.click(PASSWORD_SELECTOR);
@@ -36,7 +36,7 @@ async function createbrowsersession() {
   // await page.screenshot({ path: '../screenshots/login.png' });
   await page.click(LOGIN_BUTTON_SELECTOR);
   // if you HIT Captcha, adjust the wait time here
-  await page.waitFor(CREDS.browser.LOGIN_WAIT_TIME * 1000);
+  await page.waitForTimeout(CREDS.browser.LOGIN_WAIT_TIME * 1000);
   console.log('Login sucessful...');
   //
   // await page.screenshot({ path: '../screenshots/afterlogin.png' });

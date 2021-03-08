@@ -47,7 +47,7 @@ async function articlescraper(browser, articles) {
       continue;
     }
     console.log(`sleeping for ${randomWait} sec ...`);
-    await page.waitFor(randomWait * 1000);
+    await page.waitForTimeout(randomWait * 1000);
     console.log(`Scraping: ${articles[i].url}`);
     // await page.screenshot({ path: '../screenshots/article.png' });
     const articleHandler = await page.evaluateHandle(

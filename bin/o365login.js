@@ -29,26 +29,26 @@ function authenticate(url) {
       const page = await browser.newPage();
       await page.goto(url);
       console.log(`inserting credentials ...`);
-      await page.waitFor(3 * 1000);
+      await page.waitForTimeout(3 * 1000);
       await page.click(SIGNIN_SELECTOR);
-      await page.waitFor(5 * 1000);
+      await page.waitForTimeout(5 * 1000);
       await page.click(USERNAME_SELECTOR);
       await page.keyboard.type(CREDS.azure.username);
       await page.click(SUBMIT_SELECTOR);
       console.log(`submiting login ...`);
-      await page.waitFor(5 * 1000);
+      await page.waitForTimeout(5 * 1000);
       await page.click(PASSWORD_SELECTOR);
       await page.keyboard.type(CREDS.azure.password);
       await page.click(SUBMIT_SELECTOR);
-      await page.waitFor(3 * 1000);
+      await page.waitForTimeout(3 * 1000);
       await page.click(STAY_CONNECTED_SELECTOR).catch(() => {
         console.log(
           'Error while trying to interact with STAY_CONNECTED_SELECTOR'
         );
       });
-      await page.waitFor(5 * 1000);
+      await page.waitForTimeout(5 * 1000);
       await page.goto(url);
-      await page.waitFor(2 * 1000);
+      await page.waitForTimeout(2 * 1000);
       const rawToken = await page.evaluate(
         () => document.querySelector('body').innerText
       );
