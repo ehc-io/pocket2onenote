@@ -67,14 +67,7 @@ async function articlescraper(browser, articles) {
         (handler, articleTags) => {
           const title = handler.querySelector('h1').textContent;
           const tags = articleTags;
-          let body;
-          // new stricture
-          try {
-            body = handler.querySelector('section').outerHTML;
-          } catch {
-            // fallback
-            body = handler.querySelector('div').outerHTML;
-          }
+          const body = handler.querySelector('article');
           const scraped = true;
           return { title, tags, body, scraped };
         },
