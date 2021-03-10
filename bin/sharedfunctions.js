@@ -10,9 +10,9 @@ function httpRequest(params, data) {
     const req = https.request(params, function(res) {
       if (res.statusCode < 200 || res.statusCode >= 300) {
         reject(
-          console.log(
-            `Req: ${this.method} https://${this.res.client._host}${this.path} - Resp: HTTP request Rejected - statusCode=${res.statusCode}`
-          )
+          // console.log(
+          //   `Req: ${this.method} https://${this.res.client._host}${this.path} - Resp: HTTP request Rejected - statusCode=${res.statusCode}`
+          // )
         );
       }
       // cumulate data
@@ -36,10 +36,10 @@ function httpRequest(params, data) {
         resolve(body);
       });
       // reject on request error
-      req.on('error', function(error) {
-        console.log(`Unkown error: ${error}`);
-        reject(error);
-      });
+      // req.on('error', function(error) {
+      //   console.log(`Unkown error: ${error}`);
+      //   reject(error);
+      // });
     });
     if (data) {
       req.write(data);
