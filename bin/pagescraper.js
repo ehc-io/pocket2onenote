@@ -84,9 +84,9 @@ async function pagescraper(browser) {
       });
     }, lastPageElementHandler);
     // fine tunning to force srolling and new article refresh
-    // await page.evaluate(() => {
-    //   window.scrollBy(0, 200);
-    // });
+    await page.evaluate(() => {
+      window.scrollBy(0, 200);
+    });
     // wait timeout in order for scrolling takes place and elements change
     await page.waitForTimeout(CREDS.browser.PAGELOAD_WAIT_TIME * 1000);
     pageCounter += 1;
