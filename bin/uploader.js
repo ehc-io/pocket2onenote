@@ -210,10 +210,14 @@ function pause(t) {
 async function main() {
   const mongoUp = await connect2db(database);
   if (mongoUp) {
-    const documents = await findDocs(ArticleModel, {
-      sync: false,
-      scraped: true,
-    });
+    const documents = await findDocs(
+      ArticleModel,
+      {
+        sync: false,
+        scraped: true,
+      },
+      { dateOfEntry: -1 }
+    );
     console.log(`There are ${documents.length} articles to post`);
     for (const item of documents) {
       let postResult = false;
