@@ -147,7 +147,7 @@ async function getSectionIdEndpoint() {
 
 async function uploadArticle(document, tokenObject) {
   const apiEndpoint = await getSectionIdEndpoint();
-  console.log(`API endpoint: ${apiEndpoint}`);
+  // console.log(`API endpoint: ${apiEndpoint}`);
   let result = false;
   const payload = `
     <html lang="en-US">
