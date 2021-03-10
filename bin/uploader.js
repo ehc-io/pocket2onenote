@@ -186,16 +186,11 @@ async function uploadArticle(document, tokenObject) {
       console.log(
         `url: ${document.url} returned an error while submiting article to OneNote - Status code: ${error.response.status}`
       );
-      // if (error.response.status >= 400) {
-      //   process.exit(0);
-      // }
       await save2db(DBLogModel, {
         url: document.url,
         operationType: 'article post',
         statusMsg: `API ERROR: ${error.message}`,
       });
-      console.log('Refreshing access token...');
-      await refreshtokens();
     });
   return result;
 }
