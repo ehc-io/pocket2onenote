@@ -35,11 +35,11 @@ function httpRequest(params, data) {
         // console.log(`Resp: Status : ${res.statusCode} ${res.statusMessage}`);
         resolve(body);
       });
-    });
-    // reject on request error
-    req.on('error', function(error) {
-      console.log(`Unkown error: ${error}`);
-      reject(error);
+      // reject on request error
+      req.on('error', function(error) {
+        console.log(`Unkown error: ${error}`);
+        reject(error);
+      });
     });
     if (data) {
       req.write(data);
