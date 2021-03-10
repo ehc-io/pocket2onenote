@@ -208,6 +208,7 @@ function pause(t) {
 
 // Main function
 async function main() {
+  const { postWaitTime } = CREDS.azure;
   const mongoUp = await connect2db(database);
   if (mongoUp) {
     const documents = await findDocs(
@@ -223,7 +224,7 @@ async function main() {
       let postResult = false;
       const maxUploadTries = 2;
       let round = 0;
-      const timeout = [Math.floor(Math.random() * 5000)];
+      const timeout = [Math.floor(Math.random() * postWaitTime)];
       while (round < maxUploadTries && !postResult) {
         const tokenObj = await getValidToken(AzureTokensModel);
         try {
