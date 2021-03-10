@@ -34,18 +34,20 @@ function gethashtags(tagList) {
 }
 
 async function getSectionIdEndpoint() {
-  // await connect2db(database);
   const tokenObj = await getValidToken(AzureTokensModel);
   const { notebookName } = CREDS.azure;
   const { maxPagesperSection } = CREDS.azure;
-  const newSectionName = dateFormat(new Date(Date.now()), 'yyyy-MM-dd-hh-mm');
+  const newSectionName = dateFormat(
+    new Date(Date.now()),
+    "yyyy-MM-dd-hh-mm-aaaaa'm'"
+  );
   let notebookId;
   let latestSectionId;
   let notebookCreateResp;
   let sectionCreateResp;
   let pagesForSectionQuery;
   let currentTotalPagesForSection;
-  let createdNewSection;
+  let createNewSection;
   let foundNotebook = false;
   const currentNotebooks = await sendMSGraphAPIRequest(
     CREDS.azure.msGraphHost,
@@ -119,12 +121,12 @@ async function getSectionIdEndpoint() {
     );
   } else {
     currentTotalPagesForSection = 0;
-    createdNewSection = true;
+    createNewSection = true;
   }
   //
   // If the section isn't created already or has #pages > maxPagesperSection
   //
-  if (createdNewSection || currentTotalPagesForSection >= maxPagesperSection) {
+  if (createNewSection || currentTotalPagesForSection >= maxPagesperSection) {
     sectionCreateResp = await sendMSGraphAPIRequest(
       CREDS.azure.msGraphHost,
       [CREDS.azure.notebookEndpoint, notebookId, 'sections'].join('/'),
@@ -145,8 +147,7 @@ async function getSectionIdEndpoint() {
 
 async function uploadArticle(document, tokenObject) {
   const apiEndpoint = await getSectionIdEndpoint();
-  // console.log(`API endpoint: ${apiEndpoint}`);
-  // process.exit();
+  console.log(`API endpoint: ${apiEndpoint}`);
   let result = false;
   const payload = `
     <html lang="en-US">
