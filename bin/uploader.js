@@ -191,10 +191,6 @@ async function uploadArticle(document, tokenObject) {
         operationType: 'article post',
         statusMsg: `API ERROR: ${error.message}`,
       });
-<<<<<<< HEAD
-      console.log('Refreshing access token...');
-=======
->>>>>>> d8beed04a2333781f3b1c004af99132eb896c89d
     });
   return result;
 }
