@@ -11,7 +11,7 @@ function httpRequest(params, data) {
       if (res.statusCode < 200 || res.statusCode >= 300) {
         reject(
           console.log(
-            `Req: ${req.method} ${req.protocol}://${req.host}${req.path} - Resp: HTTP request Rejected - statusCode=${res.statusCode}`
+            `Req: ${req.method} ${req.protocol}://${req.host}${req.path} - Resp: HTTP request Rejected - statusCode=${res.statusCode} - ${res.statusMessage}`
           )
         );
       }

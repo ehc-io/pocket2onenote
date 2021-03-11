@@ -184,7 +184,7 @@ async function uploadArticle(document, tokenObject) {
     })
     .catch(async function(error) {
       console.log(
-        `url: ${document.url} returned an error while submiting article to OneNote - Status code: ${error.response.status}`
+        `url: ${document.url} returned an error while submiting article to OneNote - Status code: ${error.response.status} - ${error.response.body}`
       );
       if (error.response.status >= 400) {
         process.exit(1);
@@ -195,7 +195,6 @@ async function uploadArticle(document, tokenObject) {
         statusMsg: `API ERROR: ${error.message}`,
       });
       console.log('Refreshing access token...');
-      await refreshtokens();
     });
   return result;
 }
@@ -221,18 +220,23 @@ async function main() {
     );
     console.log(`There are ${documents.length} articles to post`);
     for (const item of documents) {
-      let postResult = false;
-      const maxUploadTries = 2;
-      let round = 0;
+      let failedUploads = 0;
+      let uploadResult;
+      const tokenObj = await getValidToken(AzureTokensModel);
       const timeout = [Math.floor(Math.random() * postWaitTime)];
-      while (round < maxUploadTries && !postResult) {
-        const tokenObj = await getValidToken(AzureTokensModel);
-        try {
-          postResult = await uploadArticle(item, tokenObj);
-        } catch {
-          console.log(`not able to Post article: ${item.url}`);
-        }
-        round += 1;
+      const maxFailedUploads = 5;
+      try {
+        uploadResult = await uploadArticle(item, tokenObj);
+      } catch {
+        console.log(`not able to Post article: ${item.url}`);
+      }
+      if (uploadResult) {
+        failedUploads += 1;
+      } else {
+        failedUploads = 0;
+      }
+      if (failedUploads > maxFailedUploads) {
+        break;
       }
       await pause(timeout);
     }
