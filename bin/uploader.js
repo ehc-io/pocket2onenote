@@ -58,7 +58,7 @@ async function getSectionIdEndpoint() {
   );
   if (!currentNotebooks) {
     console.log(`not able to get current notebooks - aborting`);
-    process.exit();
+    process.exit(0);
   }
   // lists all Notebooks and compare displayName with Notebook name to be used - CREDS.azure.notebookName
   // if found store name and Id inside "notebookName" and  "notebookId" variables
@@ -99,7 +99,7 @@ async function getSectionIdEndpoint() {
   );
   if (!currentSections) {
     console.log(`not able to get current sections - aborting`);
-    process.exit();
+    process.exit(0);
   }
   //
   // Get the latest stored section and its ammount of existing pages
@@ -186,15 +186,15 @@ async function uploadArticle(document, tokenObject) {
       console.log(
         `url: ${document.url} returned an error while submiting article to OneNote - Status code: ${error.response.status} - ${error.response.body}`
       );
-      if (error.response.status >= 400) {
-        process.exit(1);
-      }
       await save2db(DBLogModel, {
         url: document.url,
         operationType: 'article post',
         statusMsg: `API ERROR: ${error.message}`,
       });
+<<<<<<< HEAD
       console.log('Refreshing access token...');
+=======
+>>>>>>> d8beed04a2333781f3b1c004af99132eb896c89d
     });
   return result;
 }
