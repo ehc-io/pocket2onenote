@@ -203,6 +203,8 @@ function pause(t) {
 
 // Main function
 async function main() {
+  let failedUploads = 0;
+  const maxFailedUploads = 5;
   const { postWaitTime } = CREDS.azure;
   const mongoUp = await connect2db(database);
   if (mongoUp) {
@@ -216,11 +218,9 @@ async function main() {
     );
     console.log(`There are ${documents.length} articles to post`);
     for (const item of documents) {
-      let failedUploads = 0;
       let uploadResult;
       const tokenObj = await getValidToken(AzureTokensModel);
       const timeout = [Math.floor(Math.random() * postWaitTime)];
-      const maxFailedUploads = 5;
       try {
         uploadResult = await uploadArticle(item, tokenObj);
       } catch {
