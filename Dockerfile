@@ -22,11 +22,9 @@ RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser
 # Set language to UTF8
 ENV LANG="C.UTF-8"
 
-
 # Add user so we don't need --no-sandbox.
 RUN mkdir -p /home/pptruser/Downloads \
     && chown -R pptruser:pptruser /home/pptruser \
-    && chown -R pptruser:pptruser /screenshots \
     && chown -R pptruser:pptruser /pocket2onenote 
 
 # Run everything after as non-privileged user.
