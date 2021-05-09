@@ -19,15 +19,11 @@ async function getUrlArticlesForPage(page) {
   const results = await page.evaluate(function(css) {
     const elArray = [];
     const items = document.querySelectorAll(css);
-    items.forEach(function(article) {
-      elArray.push(article.children[1].href);
+    items.forEach(article => {
+      elArray.push(article.querySelector('div > div > a').href);
     });
     return elArray;
   }, cssArticles);
-  // results.forEach(el => {
-  //   console.log(`debug: ${el}`);
-  // });
-  // filtering existing URLs
   console.log(`here I have ${results.length}`);
   for (const articleUrl of results) {
     const existingDocs = await findDocs(ArticleModel, { url: articleUrl });
@@ -69,14 +65,13 @@ async function pagescraper(browser) {
     results = results.concat(newResults);
     // mapping latest URL in the article array before scrolling
     lastArticleUrl = await page.evaluate(el => {
-      console.log(`teste lastArticleUrl: ${el.children[1].href}`);
-      const lastElementUrl = el.children[1].href;
+      const lastElementUrl = el.querySelector('div > div > a').href;
       return lastElementUrl;
     }, lastPageElementHandler);
     // scrolling based on the current latest item obtained before scrolling takes place
     console.log(`Scrolling to next page ...`);
     await page.evaluate(lastElement => {
-      // lastElement.scrollIntoViewIfNeeded();
+      //
       lastElement.scrollIntoView(true, {
         behavior: 'auto',
         block: 'end',
@@ -95,7 +90,7 @@ async function pagescraper(browser) {
     } else {
       noNewArticlesCounter = 0;
     }
-    // console.log(`noNewArticlesCounter: ${noNewArticlesCounter}`);
+    console.log(`noNewArticlesCounter: ${noNewArticlesCounter}`);
     // After scrolling occurs a new page handler is required to updated article elements
     lastPageElementHandler = await page.evaluateHandle(css => {
       const elArray = document.querySelectorAll(css);
@@ -103,8 +98,12 @@ async function pagescraper(browser) {
     }, cssArticles);
     //
     lastArticleUrlSfterScrolling = await page.evaluate(el => {
-      console.log(`lastArticleUrlSfterScrolling: ${el.children[1].href}`);
-      const lastElementUrl = el.children[1].href;
+      console.log(
+        `lastArticleUrlSfterScrolling: ${
+          el.querySelector('div > div > a').href
+        }`
+      );
+      const lastElementUrl = el.querySelector('div > div > a').href;
       return lastElementUrl;
     }, lastPageElementHandler);
     // console.log(`debug - lastArticleUrl: ${lastArticleUrl}`);
