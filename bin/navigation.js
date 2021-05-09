@@ -9,7 +9,7 @@ async function createbrowsersession() {
     ignoreHTTPSErrors: true,
     devtools: false,
     args: [
-      "--proxy-server='direct://",
+      "--proxy-server='http://proxy-vivo:3128",
       '--disable-extensions',
       '--proxy-bypass-list=*',
       '--no-sandbox',
