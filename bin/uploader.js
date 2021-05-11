@@ -12,7 +12,7 @@ const ArticleModel = require('../models/pocketarticles');
 const DBLogModel = require('../models/operations');
 
 const bodyReplacer = new RegExp('/<h1>.+</h1>/');
-const { getValidToken, refreshtokens } = require('./auth');
+const { getValidToken } = require('./auth');
 const { sendMSGraphAPIRequest } = require('./sharedfunctions');
 
 // const getSectionIdEndpoint = require('./notesorganizer');
@@ -227,9 +227,11 @@ async function main() {
         console.log(`not able to Post article: ${item.url}`);
       }
       if (uploadResult) {
-        failedUploads += 1;
-      } else {
+        // failedUploads += 1;
         failedUploads = 0;
+      } else {
+        failedUploads += 1;
+        // failedUploads = 0;
       }
       if (failedUploads > maxFailedUploads) {
         break;
