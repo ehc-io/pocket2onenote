@@ -23,7 +23,14 @@ function authenticate(url) {
     try {
       const browser = await puppeteer.launch({
         headless: CREDS.browser.headless,
-        // args: ['--proxy-server=https://proxy-vivo:3128'],
+        ignoreHTTPSErrors: true,
+        devtools: false,
+        args: [
+          '--disable-extensions',
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--window-size=1024,768',
+        ],
       });
       console.log(`loading home page URL ...`);
       const page = await browser.newPage();
