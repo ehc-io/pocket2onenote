@@ -21,6 +21,7 @@ const tokenServiceUrl = 'http://localhost:3000/gettoken';
 function authenticate(url) {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log('Initiating browser session...');
       const browser = await puppeteer.launch({
         headless: CREDS.browser.headless,
         ignoreHTTPSErrors: true,
