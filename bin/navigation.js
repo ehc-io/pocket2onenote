@@ -11,7 +11,6 @@ async function createbrowsersession() {
     args: [
       CREDS.browser.proxy,
       '--disable-extensions',
-      // '--proxy-bypass-list=*',
       '--no-sandbox',
       '--disable-setuid-sandbox',
       '--window-size=1024,768',
