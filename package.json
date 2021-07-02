@@ -12,10 +12,10 @@
         "https-proxy-agent": "^5.0.0",
         "mongoose": "^5.9.22",
         "node-fetch": "^2.6.1",
+        "prettier": "^1.19.1",
         "puppeteer": "^8.0.0",
         "qs": "^6.9.4",
-        "request": "^2.88.2",
-        "prettier": "^1.19.1"
+        "request": "^2.88.2"
     },
     "peerDependencies": {},
     "devDependencies": {
