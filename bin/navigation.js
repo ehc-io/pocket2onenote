@@ -9,9 +9,9 @@ async function createbrowsersession() {
     ignoreHTTPSErrors: true,
     devtools: false,
     args: [
-      "--proxy-server='http://proxy-vivo:3128",
+      CREDS.browser.proxy,
       '--disable-extensions',
-      '--proxy-bypass-list=*',
+      // '--proxy-bypass-list=*',
       '--no-sandbox',
       '--disable-setuid-sandbox',
       '--window-size=1024,768',
