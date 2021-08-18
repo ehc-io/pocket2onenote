@@ -9,8 +9,6 @@ const AzureTokensModel = require('../models/oauthtokens');
 const { findAndUpdate } = require('./mongoops');
 const { httpRequest } = require('./sharedfunctions');
 
-const proxy = 'http://localhost:3128';
-
 async function getTokenObj(model) {
   const tokens = await model
     .find()

@@ -20,8 +20,6 @@ const DBLogModel = require('../models/operations');
 
 // Individually scrapes articles
 async function articlescraper(browser, articles) {
-  // bypass url
-  const bypassList = /redirect|youtube|twitter|pdf/g;
   const cssArticleTags =
     '#__next > main > article > header > div ~ div > div > ul > li';
   const cssMainArticle = 'article';
@@ -29,9 +27,16 @@ async function articlescraper(browser, articles) {
   const resultArray = [];
   let errorsCounter = 0;
   let itemTags;
-  //
+  const supportedDomainsRegex = new RegExp(
+    `.+(${CREDS.scraper.supportedDomains}).+`
+  );
+  const bypassListRegex = new RegExp(`.+(${CREDS.scraper.bypassList}).+`);
   for (let i = 0; i < articles.length; i += 1) {
-    if (articles[i].url.search(bypassList) !== -1) {
+    if (!supportedDomainsRegex.test(articles[i].url)) {
+      console.log(`${articles[i].url} not supported`);
+      continue;
+    }
+    if (bypassListRegex.test(articles[i].url)) {
       console.log(`${articles[i].url} bypassed`);
       continue;
     }

@@ -26,8 +26,13 @@ async function getUrlArticlesForPage(page) {
   }, cssArticles);
   console.log(`here I have ${results.length}`);
   for (const articleUrl of results) {
-    const existingDocs = await findDocs(ArticleModel, { url: articleUrl });
-    if (existingDocs.length < 1) {
+    // filters duped URLs already saved
+    const dupedDocs = await findDocs(ArticleModel, { url: articleUrl });
+    // filters not supported/scrapeable URLs
+    // const supportedContentRegex = new RegExp(
+    //   `.+(${CREDS.scraper.supportedDomains}).+`
+    // );
+    if (dupedDocs.length < 1) {
       filteredArray.push(articleUrl);
       await save2db(ArticleModel, { url: articleUrl, dateOfEntry: Date.now() });
     }

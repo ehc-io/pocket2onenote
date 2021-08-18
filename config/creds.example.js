@@ -2,19 +2,25 @@ module.exports = {
   browser: {
     LOGIN_WAIT_TIME: 5,
     SCROLL_PAGE_WAIT_TIME: 5,
-    PAGELOAD_WAIT_TIME: 3,
-    ANTI_RATE_LIMIT_RANDOM_MAX_WAIT: 90,
-    headless: true,
+    PAGELOAD_WAIT_TIME: 12,
+    NEXT_PAGE_PIXEL: 1000,
+    ANTI_RATE_LIMIT_RANDOM_MAX_WAIT: 10,
+    headless: false,
+    proxy: '--proxy-server=http://myproxy:3128',
+  },
+  scraper: {
+    bypassList: 'redirect',
+    supportedDomains: 'getpocket',
   },
   pocket: {
-    username: 'pocket@username.com',
-    password: 'mypassword',
+    username: 'user@email.com',
+    password: '756475570087',
   },
   azure: {
-    username: 'user@domain.io',
-    password: 'mypassword',
-    client_id: '12345678-1234-1234-1234-123456789012',
-    client_secret: '6X4fXSVumGkJ-MY_SECRET',
+    username: 'user@email.com',
+    password: 'password',
+    client_id: 'XXXXXXXX-YYYY-YYYY-YYYY-XXXXXXXX',
+    client_secret: 'random-blob-here',
     scope:
       'email profile offline_access openid User.Read Files.ReadWrite Notes.ReadWrite calendars.read',
     redirect_uri: 'http://localhost:3000/auth/callback',
@@ -27,5 +33,6 @@ module.exports = {
     sectionsEndpoint: '/v1.0/me/onenote/sections',
     notebookName: 'MozillaPocketImports',
     maxPagesperSection: 50,
+    postWaitTime: 8,
   },
 };
