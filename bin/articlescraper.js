@@ -21,7 +21,8 @@ const DBLogModel = require('../models/operations');
 // Individually scrapes articles
 async function articlescraper(browser, articles) {
   // bypass url
-  const bypassList = /redirect|youtube|twitter|pdf/g;
+  const bypassMarkers = new RegExp('redirect');
+  const supportedDomainList = new RegExp(CREDS.scraper.supportedDomains);
   const cssArticleTags =
     '#__next > main > article > header > div ~ div > div > ul > li';
   const cssMainArticle = 'article';
@@ -31,8 +32,9 @@ async function articlescraper(browser, articles) {
   let itemTags;
   //
   for (let i = 0; i < articles.length; i += 1) {
-    if (articles[i].url.search(bypassList) !== -1) {
-      console.log(`${articles[i].url} bypassed`);
+    // console.log(articles[i].url)
+    if (!supportedDomainList.test(articles[i].url) || bypassMarkers.test(articles[i].url)) {
+      // console.log(`${articles[i].url} bypassed`);
       continue;
     }
     const randomWait = [

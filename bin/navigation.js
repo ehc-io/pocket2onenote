@@ -19,7 +19,7 @@ async function createbrowsersession() {
   const USERNAME_SELECTOR = '#field-1';
   const PASSWORD_SELECTOR = '#field-2';
   const LOGIN_BUTTON_SELECTOR =
-    '#login-page-login-container > div > form > input';
+    '#login-page-login-container > div > form > div.loginform-submit > input';
   const LOGIN_PAGE = 'https://getpocket.com/login';
   const page = await browser.newPage();
   await page.setViewport({ width: 1056, height: 970 });
